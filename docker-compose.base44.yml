@@ -1,0 +1,17 @@
+services:
+  gnucash:
+    build:
+      context: .
+      dockerfile: Dockerfile.base44
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - gnucash-build:/app/build
+      - gnucash-install:/app/install
+    environment:
+      - DISPLAY=:0
+
+volumes:
+  gnucash-build:
+  gnucash-install:

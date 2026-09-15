@@ -1,0 +1,36 @@
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Enable universe repository (needed for webkit, x11vnc, openbox, etc.)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends software-properties-common && \
+    add-apt-repository -y universe && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+      build-essential cmake ninja-build pkg-config git ca-certificates \
+      libglib2.0-dev libglib2.0-dev-bin libgtk-3-dev \
+      libwebkit2gtk-4.1-dev \
+      guile-3.0-dev \
+      libxml2-dev libxslt1-dev xsltproc \
+      libboost-all-dev \
+      swig \
+      libicu-dev \
+      libdbi-dev libdbd-sqlite3 \
+      gettext \
+      libofx-dev \
+      libsecret-1-dev \
+      libgtest-dev libgmock-dev \
+      perl python3-dev \
+      dconf-cli dbus-x11 \
+      xvfb openbox x11vnc \
+      python3-websockify \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download noVNC web client
+RUN git clone --depth 1 https://github.com/novnc/noVNC.git /opt/novnc && \
+    printf '<!DOCTYPE html>\n<html><head>\n<meta http-equiv="refresh" content="0;url=vnc.html?autoconnect=true&resize=scale&reconnect=true">\n<title>GnuCash</title>\n</head>\n<body>Redirecting to GnuCash...</body>\n</html>\n' \
+    > /opt/novnc/index.html
+
+WORKDIR /app
+CMD ["bash", "/app/start-gnucash.sh"]
