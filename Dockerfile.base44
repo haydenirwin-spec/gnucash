@@ -27,6 +27,14 @@ RUN apt-get update && \
       python3-websockify \
     && rm -rf /var/lib/apt/lists/*
 
+# Create minimal openbox config and menu to avoid warnings
+RUN mkdir -p /var/lib/openbox && \
+    printf '<?xml version="1.0" encoding="UTF-8"?>\n<openbox_menu></openbox_menu>\n' \
+    > /var/lib/openbox/debian-menu.xml && \
+    mkdir -p /etc/openbox && \
+    printf '<?xml version="1.0" encoding="UTF-8"?>\n<openbox_config><menu><file>/var/lib/openbox/debian-menu.xml</file></menu></openbox_config>\n' \
+    > /etc/openbox/minimal-rc.xml
+
 # Download noVNC web client
 RUN git clone --depth 1 https://github.com/novnc/noVNC.git /opt/novnc && \
     printf '<!DOCTYPE html>\n<html><head>\n<meta http-equiv="refresh" content="0;url=vnc.html?autoconnect=true&resize=scale&reconnect=true">\n<title>GnuCash</title>\n</head>\n<body>Redirecting to GnuCash...</body>\n</html>\n' \

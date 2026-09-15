@@ -40,11 +40,11 @@ eval "$(dbus-launch --sh-syntax)"
 export DBUS_SESSION_BUS_ADDRESS
 
 # Start virtual framebuffer
-Xvfb :0 -screen 0 1280x800x24 -ac &
+Xvfb :0 -screen 0 1280x800x24 -ac 2>/dev/null &
 sleep 2
 
 # Start window manager
-openbox &
+openbox --config-file /etc/openbox/minimal-rc.xml 2>/dev/null &
 sleep 1
 
 # Start VNC server (no password for simplicity in dev preview)
